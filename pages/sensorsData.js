@@ -35,8 +35,8 @@ export default function SensorsData() {
             <MenuItem value={sensorId}>{sensorId}</MenuItem>
           ))}
         </Select>
+        {sensorId && <SensorContainer sensorId={sensorId} />}
       </main>
-      <SensorContainer sensorId={sensorId} />;
     </div>
   );
 }
