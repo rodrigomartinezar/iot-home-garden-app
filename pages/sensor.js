@@ -5,6 +5,10 @@ import Button from "@material-ui/core/Button";
 import useSWR from "swr";
 
 const formatKelvin = (kelvinT) => Math.round(kelvinT - 273.15);
+const charsToReplace = {
+  T: " ",
+  Z: "",
+};
 
 export default function SensorContainer(props) {
   useEffect(() => {
@@ -29,25 +33,36 @@ export default function SensorContainer(props) {
     );
   }
   const formatData = JSON.parse(JSON.stringify(data));
-
+  console.log(formatData[0].timestamp);
   return (
-    <div>
-      <main className={styles.main}>
-        <table>
-          <tr>
-            <th>Temperatura</th>
-            <th>Humedad</th>
-          </tr>
-          {formatData.map((sample) => {
-            return (
-              <tr>
-                <td>{formatKelvin(sample.data.payload.main.temp)}°C</td>
-                <td>{sample.data.payload.main.humidity}%</td>
-              </tr>
-            );
-          })}
-        </table>
-      </main>
-    </div>
+    formatData && (
+      <div>
+        <main className={styles.main}>
+          <table>
+            <tr>
+              <th>Toma</th>
+              <th>Fecha toma</th>
+              <th>Temperatura</th>
+              <th>Humedad</th>
+            </tr>
+            {formatData.map((sample, index) => {
+              return (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>
+                    {sample.timestamp.replace(
+                      /[TZ]/g,
+                      (m) => charsToReplace[m]
+                    )}
+                  </td>
+                  <td>{formatKelvin(sample.data.payload.main.temp)}°C</td>
+                  <td>{sample.data.payload.main.humidity}%</td>
+                </tr>
+              );
+            })}
+          </table>
+        </main>
+      </div>
+    )
   );
 }
