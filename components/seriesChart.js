@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { format } from "d3";
 import styles from "../styles/Home.module.css";
 
 const formatKelvin = (kelvinT) => kelvinT - 273.15;
@@ -16,12 +15,12 @@ const arrayOfHumidity = (data) =>
   data.map((sample) => sample.data.payload.main.humidity);
 
 const arrayOfTime = (data) => {
-  data
+  return data
     .map((sample) =>
       sample.timestamp.replace(/[TZ]/g, (m) => charsToReplace[m])
     )
     .map((unformattedDate) => {
-      const formatter = d3.timeFormat("%Y-%m-d %h:%M:%S");
+      const formatter = d3.timeParse("%Y-%m-%d %H:%M:%S");
       return formatter(unformattedDate);
     });
 };
@@ -30,7 +29,6 @@ const yScale = (data) => d3.scaleLinear().domain([0, Math.max(...data)]);
 
 const SeriesChart = (props) => {
   const { formatData } = props;
-  console.log(arrayOfTime(formatData));
   return (
     formatData && (
       <div>
