@@ -15,11 +15,22 @@ const arrayOfTemperature = (data) =>
 const arrayOfHumidity = (data) =>
   data.map((sample) => sample.data.payload.main.humidity);
 
+const arrayOfTime = (data) => {
+  data
+    .map((sample) =>
+      sample.timestamp.replace(/[TZ]/g, (m) => charsToReplace[m])
+    )
+    .map((unformattedDate) => {
+      const formatter = d3.timeFormat("%Y-%m-d %h:%M:%S");
+      return formatter(unformattedDate);
+    });
+};
+
 const yScale = (data) => d3.scaleLinear().domain([0, Math.max(...data)]);
 
 const SeriesChart = (props) => {
   const { formatData } = props;
-  console.log(yScale(arrayOfTemperature(formatData)));
+  console.log(arrayOfTime(formatData));
   return (
     formatData && (
       <div>
