@@ -58,16 +58,17 @@ const SeriesChart = (props) => {
     d3.select(yAxis.current).call(yAxisGenerator);
     d3.select(xAxis.current).call(xAxisGenerator);
 
-    const chart = d3
-      .select(chartRef.current)
+    d3.select(chartRef.current)
       .append("path")
-      .datum(formatData)
+      .datum(arrayOfTemperature(formatData))
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", 1.5)
       .attr(
         "d",
-        d3.line(arrayOfTime(formatData), arrayOfTemperature(formatData))
+        d3.line().y(function (d) {
+          return yScale(d);
+        })
       );
   });
 
