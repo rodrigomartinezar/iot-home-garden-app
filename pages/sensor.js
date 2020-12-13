@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import Button from "@material-ui/core/Button";
 import useSWR from "swr";
 
-const formatKelvin = (kelvinT) => Math.round(kelvinT - 273.15);
+const formatKelvin = (kelvinT) => kelvinT - 273.15;
 const charsToReplace = {
   T: " ",
   Z: "",
