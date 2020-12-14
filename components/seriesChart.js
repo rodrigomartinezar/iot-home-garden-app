@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import styles from "../styles/Home.module.css";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const formatKelvin = (kelvinT) => kelvinT - 273.15;
 
@@ -10,7 +11,7 @@ const charsToReplace = {
 };
 
 const margin = { top: 10, right: 30, bottom: 30, left: 60 };
-const width = 460 - margin.left - margin.right;
+const width = 1000 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
 const arrayOfTemperature = (data) =>
@@ -30,10 +31,19 @@ const arrayOfTime = (data) => {
     });
 };
 
+const arrayOfObjects = (array1, array2) => {
+  return array1.map((element, index) => {
+    let resultingObject = {};
+    resultingObject["timestamp"] = element;
+    resultingObject["value"] = array2[index];
+    return resultingObject;
+  });
+};
+
 const xScale = (data) =>
   d3
     .scaleTime()
-    .domain(d3.extent(arrayOfTime(data)))
+    .domain([d3.min(arrayOfTime(data)), d3.max(arrayOfTime(data))])
     .range([0, width]);
 
 const yScale = (data) =>
@@ -45,11 +55,28 @@ const yScale = (data) =>
 const SeriesChart = (props) => {
   const { formatData } = props;
 
+  const dataToPlot = arrayOfObjects(
+    arrayOfTime(formatData),
+    arrayOfTemperature(formatData)
+  );
+
+  /* const x = d3
+    .scaleTime()
+    .domain([d3.min(arrayOfTime(formatData)), d3.max(arrayOfTime(formatData))])
+    .range([0, width]);
+  const y = d3
+    .scaleLinear()
+    .domain([0, Math.max(arrayOfTemperature(formatData))])
+    .range([height, 0]);
+
   const xAxis = useRef();
   const yAxis = useRef();
   const chartRef = useRef();
 
-  const xAxisGenerator = d3.axisBottom(xAxis).scale(xScale(formatData));
+  const xAxisGenerator = d3
+    .axisBottom(xAxis)
+    .scale(xScale(formatData))
+    .tickFormat(d3.timeFormat("%m-%d %H:%M"));
   const yAxisGenerator = d3
     .axisLeft(yAxis)
     .scale(yScale(arrayOfTemperature(formatData)));
@@ -60,21 +87,26 @@ const SeriesChart = (props) => {
 
     d3.select(chartRef.current)
       .append("path")
-      .datum(arrayOfTemperature(formatData))
+      .datum(dataToPlot)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
       .attr("stroke-width", 1.5)
       .attr(
         "d",
-        d3.line().y(function (d) {
-          return yScale(d);
-        })
+        d3
+          .line()
+          .x(function (d) {
+            return x(d.timestamp);
+          })
+          .y(function (d) {
+            return y(d.value);
+          })
       );
-  });
+  }); */
 
   return (
     <div>
-      <svg
+      {/* <svg
         ref={chartRef}
         width={width + margin.left + margin.right}
         height={height + margin.top + margin.bottom}
@@ -86,40 +118,14 @@ const SeriesChart = (props) => {
             transform={`translate (${margin.right}, ${0 + margin.top})`}
           />
         </g>
-      </svg>
+      </svg> */}
+      <LineChart width={width} height={height} data={dataToPlot}>
+        <XAxis dataKey="timestamp" />
+        <YAxis />
+        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+        <Line type="monotone" dataKey="value" stroke="#8884d8" />
+      </LineChart>
     </div>
-  );
-  return (
-    formatData && (
-      <div>
-        <main className={styles.main}>
-          <h1>Hola desde el componente</h1>
-          <table>
-            <tr>
-              <th>Toma</th>
-              <th>Fecha toma</th>
-              <th>Temperatura</th>
-              <th>Humedad</th>
-            </tr>
-            {formatData.map((sample, index) => {
-              return (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>
-                    {sample.timestamp.replace(
-                      /[TZ]/g,
-                      (m) => charsToReplace[m]
-                    )}
-                  </td>
-                  <td>{formatKelvin(sample.data.payload.main.temp)}°C</td>
-                  <td>{sample.data.payload.main.humidity}%</td>
-                </tr>
-              );
-            })}
-          </table>
-        </main>
-      </div>
-    )
   );
 };
 
