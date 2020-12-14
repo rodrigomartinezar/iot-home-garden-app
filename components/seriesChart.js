@@ -40,18 +40,6 @@ const arrayOfObjects = (array1, array2) => {
   });
 };
 
-const xScale = (data) =>
-  d3
-    .scaleTime()
-    .domain([d3.min(arrayOfTime(data)), d3.max(arrayOfTime(data))])
-    .range([0, width]);
-
-const yScale = (data) =>
-  d3
-    .scaleLinear()
-    .domain([0, Math.max(...data)])
-    .range([height, 0]);
-
 const SeriesChart = (props) => {
   const { formatData } = props;
 
@@ -60,65 +48,8 @@ const SeriesChart = (props) => {
     arrayOfTemperature(formatData)
   );
 
-  /* const x = d3
-    .scaleTime()
-    .domain([d3.min(arrayOfTime(formatData)), d3.max(arrayOfTime(formatData))])
-    .range([0, width]);
-  const y = d3
-    .scaleLinear()
-    .domain([0, Math.max(arrayOfTemperature(formatData))])
-    .range([height, 0]);
-
-  const xAxis = useRef();
-  const yAxis = useRef();
-  const chartRef = useRef();
-
-  const xAxisGenerator = d3
-    .axisBottom(xAxis)
-    .scale(xScale(formatData))
-    .tickFormat(d3.timeFormat("%m-%d %H:%M"));
-  const yAxisGenerator = d3
-    .axisLeft(yAxis)
-    .scale(yScale(arrayOfTemperature(formatData)));
-
-  useEffect(() => {
-    d3.select(yAxis.current).call(yAxisGenerator);
-    d3.select(xAxis.current).call(xAxisGenerator);
-
-    d3.select(chartRef.current)
-      .append("path")
-      .datum(dataToPlot)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr(
-        "d",
-        d3
-          .line()
-          .x(function (d) {
-            return x(d.timestamp);
-          })
-          .y(function (d) {
-            return y(d.value);
-          })
-      );
-  }); */
-
   return (
     <div>
-      {/* <svg
-        ref={chartRef}
-        width={width + margin.left + margin.right}
-        height={height + margin.top + margin.bottom}
-      >
-        <g>
-          <g ref={xAxis} transform={`translate (0, ${height + margin.top})`} />
-          <g
-            ref={yAxis}
-            transform={`translate (${margin.right}, ${0 + margin.top})`}
-          />
-        </g>
-      </svg> */}
       <LineChart width={width} height={height} data={dataToPlot}>
         <XAxis dataKey="timestamp" />
         <YAxis />
