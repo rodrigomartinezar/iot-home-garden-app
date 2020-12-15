@@ -52,9 +52,9 @@ const SeriesChart = (props) => {
     <div>
       <LineChart width={width} height={height} data={dataToPlot}>
         <XAxis dataKey="timestamp" />
-        <YAxis />
+        <YAxis unit="°C" />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line type="monotone" dataKey="value" stroke="#8884d8" />
+        <Line type="basis" dataKey="value" stroke="#8884d8" dot={false} />
       </LineChart>
     </div>
   );
