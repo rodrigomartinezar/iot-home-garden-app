@@ -41,20 +41,39 @@ const arrayOfObjects = (array1, array2) => {
 };
 
 const SeriesChart = (props) => {
-  const { formatData } = props;
+  const { formatData, variableToPlot } = props;
 
-  const dataToPlot = arrayOfObjects(
-    arrayOfTime(formatData),
-    arrayOfTemperature(formatData)
-  );
+  let dataToPlot;
+
+  if (variableToPlot === "temperatura") {
+    dataToPlot = arrayOfObjects(
+      arrayOfTime(formatData),
+      arrayOfTemperature(formatData)
+    );
+  }
+
+  if (variableToPlot === "humedad") {
+    dataToPlot = arrayOfObjects(
+      arrayOfTime(formatData),
+      arrayOfHumidity(formatData)
+    );
+  }
 
   return (
     <div>
+      {variableToPlot === "temperatura" && <h2>Temperatura</h2>}
+      {variableToPlot === "humedad" && <h2>Humedad</h2>}
       <LineChart width={width} height={height} data={dataToPlot}>
         <XAxis dataKey="timestamp" />
-        <YAxis unit="°C" />
+        {variableToPlot === "temperatura" && <YAxis unit="°C" />}
+        {variableToPlot === "humedad" && <YAxis unit="%" />}
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <Line type="basis" dataKey="value" stroke="#8884d8" dot={false} />
+        {variableToPlot === "temperatura" && (
+          <Line type="basis" dataKey="value" stroke="#8884d8" dot={false} />
+        )}
+        {variableToPlot === "humedad" && (
+          <Line type="basis" dataKey="value" stroke="#f50057" dot={false} />
+        )}
       </LineChart>
     </div>
   );

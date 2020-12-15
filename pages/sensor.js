@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import Button from "@material-ui/core/Button";
 import styles from "../styles/Home.module.css";
 import useSWR from "swr";
 import SeriesChart from "../components/seriesChart";
@@ -11,6 +12,9 @@ export default function SensorContainer(props) {
   const { data, error } = useSWR(
     `http://localhost:4000/city-data?sensor_id=${props.sensorId}`
   );
+
+  const [variableToPlot, setVariableToPlot] = useState("temperatura");
+
   if (error) {
     return (
       <main className={styles.main}>
@@ -26,5 +30,27 @@ export default function SensorContainer(props) {
     );
   }
   const formatData = JSON.parse(JSON.stringify(data));
-  return <SeriesChart formatData={formatData} />;
+  return (
+    <div>
+      <div>
+        <SeriesChart formatData={formatData} variableToPlot={variableToPlot} />
+      </div>
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setVariableToPlot("temperatura")}
+        >
+          Temperatura
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setVariableToPlot("humedad")}
+        >
+          Humedad
+        </Button>
+      </div>
+    </div>
+  );
 }
