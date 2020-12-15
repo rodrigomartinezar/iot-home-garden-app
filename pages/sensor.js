@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
+import { Button, Switch, FormControlLabel } from "@material-ui/core";
 import styles from "../styles/Home.module.css";
 import useSWR from "swr";
 import SeriesChart from "../components/seriesChart";
@@ -50,6 +50,11 @@ export default function SensorContainer(props) {
         >
           Humedad
         </Button>
+        <FormControlLabel
+          style={{ paddingLeft: "10px" }}
+          control={<Switch color="Primary" />}
+          label="Riego"
+        />
       </div>
     </div>
   );

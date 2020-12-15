@@ -1,7 +1,14 @@
 import { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import styles from "../styles/Home.module.css";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ReferenceArea,
+} from "recharts";
 
 const formatKelvin = (kelvinT) => kelvinT - 273.15;
 
@@ -73,6 +80,18 @@ const SeriesChart = (props) => {
         )}
         {variableToPlot === "humedad" && (
           <Line type="basis" dataKey="value" stroke="#f50057" dot={false} />
+        )}
+        {variableToPlot === "temperatura" && (
+          <ReferenceArea y1={20} y2={28} stroke="red" strokeOpacity={0.3} />
+        )}
+        {variableToPlot === "temperatura" && (
+          <ReferenceArea y1={0} y2={8} stroke="red" strokeOpacity={0.3} />
+        )}
+        {variableToPlot === "humedad" && (
+          <ReferenceArea y1={80} y2={100} stroke="red" strokeOpacity={0.3} />
+        )}
+        {variableToPlot === "humedad" && (
+          <ReferenceArea y1={0} y2={30} stroke="red" strokeOpacity={0.3} />
         )}
       </LineChart>
     </div>
